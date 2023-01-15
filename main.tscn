@@ -1,12 +1,70 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/New Piskel.png" type="Texture" id=1]
 [ext_resource path="res://player.gd" type="Script" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://door.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 31.25, 31.25 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 31.25, 31.25 )
 
 [node name="Node2D" type="Node2D"]
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="Door 1" type="Area2D" parent="Doors"]
+position = Vector2( 864, 117 )
+script = ExtResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="Doors/Door 1"]
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door 1"]
+position = Vector2( -0.25, -0.25 )
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Door 2" type="Area2D" parent="Doors"]
+position = Vector2( 868, 300 )
+script = ExtResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="Doors/Door 2"]
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door 2"]
+position = Vector2( -0.25, -0.25 )
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Door 3" type="Area2D" parent="Doors"]
+position = Vector2( 871, 469 )
+script = ExtResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="Doors/Door 3"]
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door 3"]
+position = Vector2( -0.25, -0.25 )
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Player" type="KinematicBody2D" parent="."]
 script = ExtResource( 2 )
@@ -23,3 +81,7 @@ shape = SubResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[connection signal="input_event" from="Doors/Door 1" to="Doors/Door 1" method="_on_Door_input_event"]
+[connection signal="input_event" from="Doors/Door 2" to="Doors/Door 2" method="_on_Door_input_event"]
+[connection signal="input_event" from="Doors/Door 3" to="Doors/Door 3" method="_on_Door_input_event"]
