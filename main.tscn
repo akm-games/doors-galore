@@ -124,5 +124,8 @@ position = Vector2( -10, 390 )
 shape = SubResource( 8 )
 
 [connection signal="input_event" from="Doors/Door 1" to="Doors/Door 1" method="_on_Door_input_event"]
+[connection signal="input_event" from="Doors/Door 1" to="Player" method="_on_Door_1_input_event"]
 [connection signal="input_event" from="Doors/Door 2" to="Doors/Door 2" method="_on_Door_input_event"]
+[connection signal="input_event" from="Doors/Door 2" to="Player" method="_on_Door_2_input_event"]
 [connection signal="input_event" from="Doors/Door 3" to="Doors/Door 3" method="_on_Door_input_event"]
+[connection signal="input_event" from="Doors/Door 3" to="Player" method="_on_Door_3_input_event"]
