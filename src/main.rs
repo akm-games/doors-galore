@@ -1,6 +1,6 @@
 use bevy::{prelude::*, window::PresentMode};
 
-const CLEAR: Color = Color::rgb(1.0, 0.0, 0.0);
+const CLEAR: Color = Color::rgb(0.5, 0.5, 0.5);
 
 fn main() {
     App::new()
@@ -17,11 +17,27 @@ fn main() {
                 },
                 ..default()
             })
+            .set(ImagePlugin::default_nearest())
         )
         .add_startup_system(init_camera)
+        .add_startup_system(create_center_sprite)
         .run();
 }
 
 fn init_camera(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2dBundle {
+        projection: OrthographicProjection {
+            scale: 0.1,
+            ..default()
+        },
+        ..default()
+    });
+}
+
+fn create_center_sprite(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn(SpriteBundle {
+        texture: asset_server.load("../assets/mc.png"),
+        transform: Transform::from_xyz(0.0, 0.0, 1.0),
+        ..default()
+    });
 }
