@@ -21,6 +21,7 @@ fn main() {
         )
         .add_startup_system(init_camera)
         .add_startup_system(create_center_sprite)
+        .add_startup_system(create_room)
         .run();
 }
 
@@ -40,4 +41,7 @@ fn create_center_sprite(mut commands: Commands, asset_server: Res<AssetServer>) 
         transform: Transform::from_xyz(0.0, 0.0, 1.0),
         ..default()
     });
+}
+
+fn create_room(mut commands: Commands) {
 }
