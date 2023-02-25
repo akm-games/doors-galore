@@ -1,5 +1,12 @@
-use bevy::{prelude::*, window::PresentMode};
+use bevy::{
+    prelude::*,
+    window::PresentMode,
+};
 use bevy_ecs_tilemap::{TilemapPlugin, prelude::{TilemapSize, TilemapId, TilemapType, TilemapTileSize, TilemapGridSize, get_tilemap_center_transform, TilemapTexture}, tiles::{TileStorage, TilePos, TileBundle}, TilemapBundle};
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
+
+mod camera;
+use camera::CameraPlugin;
 
 const CLEAR: Color = Color::rgb(0.5, 0.5, 0.5);
 
@@ -21,31 +28,24 @@ fn main() {
             .set(ImagePlugin::default_nearest())
         )
         .add_plugin(TilemapPlugin)
-        .add_startup_system(init_camera)
-        .add_startup_system(create_center_sprite)
-        .add_startup_system(create_tilemap)
+        .add_plugin(CameraPlugin)
+        .add_plugin(WorldInspectorPlugin)
+        .add_startup_system(spawn_player)
+        .add_startup_system(spawn_tilemap)
         .run();
 }
 
-fn init_camera(mut commands: Commands) {
-    commands.spawn(Camera2dBundle {
-        projection: OrthographicProjection {
-            scale: 0.1,
-            ..default()
-        },
-        ..default()
-    });
-}
 
-fn create_center_sprite(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(SpriteBundle {
         texture: asset_server.load("../assets/mc.png"),
         transform: Transform::from_xyz(0.0, 0.0, 1.0),
         ..default()
-    });
+    })
+        .insert(Name::new("Player"));
 }
 
-fn create_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn spawn_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
     let map_size = TilemapSize {
         x: 32,
         y: 32,
@@ -53,7 +53,7 @@ fn create_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     let texture_handle: Handle<Image> = asset_server.load("../assets/0x72_DungeonTilesetII_v1.4/frames/floor_1.png");
 
-    let tilemap_entity = commands.spawn_empty().id();
+    let tilemap_entity = commands.spawn(Name::new("Tilemap")).id();
     let mut tile_storage = TileStorage::empty(map_size);
 
     for x in 0..map_size.x {
@@ -64,7 +64,11 @@ fn create_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
                 tilemap_id: TilemapId(tilemap_entity),
                 ..default()
             })
-            .id();
+                .insert(Name::new("Tile"))
+                .id();
+                
+            commands.entity(tilemap_entity)
+                .add_child(tile_entity);
 
             tile_storage.set(&tile_pos, tile_entity);
         }
